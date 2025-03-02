@@ -1,0 +1,42 @@
+services:
+  mongo:
+    image: 'mongo:7.0.0'
+    restart: 'always'
+    environment:
+      MONGO_INITDB_DATABASE: hafezsho
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+    volumes:
+      - mongo:/data/db
+
+    # ports:
+      # - '127.0.0.1:27017:27017'
+  redis:
+    image: redis/redis-stack-server:6.2.6-v9
+    restart: always
+    volumes:
+      - redis_data:/data
+    # ports:
+    #   - '127.0.0.1:6379:6379'
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV}
+        PORT: ${PORT}
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${PORT}:${PORT}"
+      - "0.0.0.0:${SOCKET_PORT}:${SOCKET_PORT}"
+      # - "0.0.0.0:${SOCKET_PORT}:${SOCKET_PORT}"
+    restart: always
+    depends_on:
+      - redis
+      - mongo
+  
+
+volumes:
+ mongo:
+ redis_data:
