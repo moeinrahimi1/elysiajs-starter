@@ -17,7 +17,7 @@ const app = new Elysia()
   });
 
 console.log(
-  `🦊 ${app.name} Backend is running! Access Swagger UI at http://${app.server?.hostname}:${app.server?.port}/swagger`
+  `🦊 ${app.server?.hostname} Backend is running! Access Swagger UI at http://${app.server?.hostname}:${app.server?.port}/swagger`
 );
 
 export type App = typeof app;
